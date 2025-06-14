@@ -1,34 +1,45 @@
 import streamlit as st
 
-# Cấu hình trang
-st.set_page_config(page_title="🏁 Game Đua Xe", page_icon="🏎️", layout="centered")
+# ⚙️ Cấu hình trang
+st.set_page_config(page_title="Đua Xe Máy", page_icon="🏍️")
 
-# Tiêu đề trang
+# 🚩 Tiêu đề bằng Markdown
 st.markdown("""
-# 🏎️ **SPEEDZONE - GAME ĐUA XE SIÊU TỐC**
-Chào mừng bạn đến với thế giới tốc độ!  
-Hãy chọn xe đua, chọn đường đua và bấm nút **"BẮT ĐẦU ĐUA"** để cháy hết mình!  
+# 🏍️ **MOTO RACE - CUỘC ĐUA XE MÁY THẦN TỐC**
+> Chào mừng bạn đến với cuộc đua tốc độ!  
+> Hãy chọn chiếc xe máy yêu thích và địa hình để khởi động động cơ!  
 ---
 """)
 
-# Hình ảnh minh họa
-st.image("https://cdn.pixabay.com/photo/2020/01/28/01/23/sportscar-4798262_1280.jpg", caption="Sẵn sàng để đua?", use_column_width=True)
+# 🛵 Chọn xe máy
+bike = st.selectbox("🛵 Chọn xe máy đua:", [
+    "Exciter 155 VVA",
+    "Winner X",
+    "Wave Alpha Tăng Áp",
+    "Honda Sonic 150R",
+    "Suzuki Raider R150"
+])
 
-# Chọn xe đua
-car = st.selectbox("🚘 Chọn xe đua:", ["Xe Tia Chớp", "Xe Địa Hình", "Xe Công Thức 1", "Xe Bay Cyber"])
+# 🏞️ Chọn địa hình đua
+terrain = st.radio("🌍 Chọn địa hình:", [
+    "Đường nhựa thành phố",
+    "Đường núi hiểm trở",
+    "Đường đua sân vận động",
+    "Đường bùn địa hình"
+])
 
-# Chọn đường đua
-track = st.radio("🛣️ Chọn đường đua:", ["Đường Thành Phố", "Sa Mạc Nóng Bỏng", "Rừng Tốc Độ", "Đường Đua Mặt Trăng"])
+# ⚡ Chọn tốc độ
+speed = st.slider("⚙️ Chọn tốc độ khởi điểm (Km/h):", min_value=40, max_value=200, step=10, value=100)
 
-# Chọn tốc độ
-speed = st.slider("⚙️ Chọn tốc độ (Km/h):", 50, 400, 150, step=10)
-
-# Nút bắt đầu
-if st.button("🔥 BẮT ĐẦU ĐUA"):
-    st.success(f"🚀 Bạn đang đua với **{car}** trên đường **{track}** với tốc độ **{speed} Km/h**!")
+# 🚀 Nút bắt đầu đua
+if st.button("🔥 BẮT ĐẦU CUỘC ĐUA"):
+    st.success(f"🏁 Bạn đang cưỡi **{bike}** trên địa hình **{terrain}** với tốc độ **{speed} Km/h**!")
     st.balloons()
-    st.markdown("### 🏆 Hãy cố gắng để về đích trước mọi đối thủ!")
+    st.markdown("### 🏆 Vượt qua tất cả và trở thành tay đua huyền thoại!")
 
-# Footer
+# 📸 Hình ảnh minh họa xe đua
+st.image("https://cdn.pixabay.com/photo/2015/05/15/14/42/motorcycle-768923_1280.jpg", use_column_width=True, caption="Tăng tốc nào!")
+
+# 📎 Chữ kết
 st.markdown("---")
-st.caption("🎮 Trang web demo game đua xe - thiết kế bởi ChatGPT")
+st.caption("🎮 Trang web mô phỏng đua xe máy bằng Streamlit & Markdown – Thiết kế bởi AI")
