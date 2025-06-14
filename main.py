@@ -1,7 +1,5 @@
 import streamlit as st
-st.title('đi ngủ')
-import streamlit as st
-
+st.title('
 # ✅ Phải nằm ở đầu tiên sau import
 st.set_page_config(page_title="Các Tỉnh Mới", page_icon="🏞️")
 
@@ -26,4 +24,4 @@ province = provinces[province_name]
 
 st.subheader(province_name)
 st.image(province["image_url"], use_column_width=True)
-st.write(province["description"])
+st.write(province["description"])')
