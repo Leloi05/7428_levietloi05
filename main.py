@@ -1,108 +1,34 @@
 import streamlit as st
 st.title('hello world')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>🎉 Trang Web Giải Trí</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: linear-gradient(to bottom, #000000, #2c3e50);
-      animation: bg 10s infinite alternate;
-      font-family: 'Segoe UI', sans-serif;
-    }
+import streamlit as st
+import random
 
-    @keyframes bg {
-      0% { background: linear-gradient(to bottom, #000000, #2c3e50); }
-      100% { background: linear-gradient(to bottom, #1e3c72, #2a5298); }
-    }
+# Thiết lập session state cho số bí mật
+if 'secret_number' not in st.session_state:
+    st.session_state.secret_number = random.randint(1, 100)
 
-    h1 {
-      color: white;
-      text-align: center;
-      margin-top: 40px;
-      font-size: 3em;
-      text-shadow: 0 0 10px pink;
-    }
+if 'attempts' not in st.session_state:
+    st.session_state.attempts = 0
 
-    .heart {
-      width: 20px;
-      height: 20px;
-      background-color: pink;
-      position: absolute;
-      top: 100%;
-      transform: rotate(45deg);
-      animation: float 4s linear infinite;
-    }
+st.title("🎮 Trò chơi đoán số 🎯")
+st.subheader("Hãy đoán một số từ 1 đến 100!")
 
-    .heart::before,
-    .heart::after {
-      content: "";
-      width: 20px;
-      height: 20px;
-      background-color: pink;
-      border-radius: 50%;
-      position: absolute;
-    }
+# Nhập số
+guess = st.number_input("Nhập số bạn đoán:", min_value=1, max_value=100, step=1)
 
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
+# Nút "Đoán"
+if st.button("Đoán"):
+    st.session_state.attempts += 1
+    if guess < st.session_state.secret_number:
+        st.warning("🔼 Số bí mật lớn hơn!")
+    elif guess > st.session_state.secret_number:
+        st.warning("🔽 Số bí mật nhỏ hơn!")
+    else:
+        st.success(f"🎉 Chính xác! Bạn đã đoán đúng sau {st.session_state.attempts} lần.")
+        # Reset game
+        if st.button("Chơi lại"):
+            st.session_state.secret_number = random.randint(1, 100)
+            st.session_state.attempts = 0
 
-    .heart::after {
-      left: -10px;
-      top: 0;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0) rotate(45deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-600px) rotate(45deg);
-        opacity: 0;
-      }
-    }
-
-    .credit {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      color: white;
-      font-size: 0.9em;
-    }
-
-    audio {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>💖 Chào mừng bạn đến với thế giới giải trí! 💖</h1>
-
-  <!-- Nhạc nền tự động phát -->
-  <audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="credit">🎵 Nhạc nền: Bensound – Ukulele | Hiệu ứng by ChatGPT 💫</div>
-
-  <script>
-    setInterval(() => {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.animationDuration = (3 + Math.random() * 2) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
-    }, 200);
-  </script>
-
-</body>
-</html>
+# Hiện số lần đoán
+st.info(f"Số lần bạn đã đoán: {st.session_state.attempts}")
