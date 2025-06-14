@@ -1,68 +1,79 @@
 import streamlit as st
 
-# ⚙️ Cấu hình trang
-st.set_page_config(page_title="Trang Web Scratch Giả Lập", page_icon="🐱", layout="wide")
+# --- Cấu hình trang
+st.set_page_config(page_title="Scratch Login Demo", page_icon="🐱", layout="wide")
 
-# 🔵 Header chính (logo và menu)
+# --- Session state để lưu trạng thái đăng nhập
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+# --- Hàm kiểm tra đăng nhập
+def check_login(username, password):
+    return username == "scratchuser" and password == "1234"
+
+# --- Nếu chưa đăng nhập
+if not st.session_state.logged_in:
+    st.markdown("## 🔐 Scratch Login")
+    username = st.text_input("👤 Username")
+    password = st.text_input("🔒 Password", type="password")
+    if st.button("➡️ Login"):
+        if check_login(username, password):
+            st.session_state.logged_in = True
+            st.success("✅ Đăng nhập thành công!")
+        else:
+            st.error("❌ Sai tài khoản hoặc mật khẩu.")
+    st.stop()
+
+# --- Header sau khi đăng nhập
 st.markdown("""
 <style>
-    .scratch-header {
-        background-color: #974ec3;
-        padding: 1rem;
-        color: white;
-        font-size: 22px;
-        font-weight: bold;
-    }
-    .menu-buttons > button {
-        margin-right: 10px;
-    }
+.scratch-header {
+    background-color: #974ec3;
+    padding: 1rem;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+}
 </style>
 <div class='scratch-header'>
-    🐱 Scratch Giả Lập &nbsp;&nbsp;&nbsp;&nbsp;
-    <span class='menu-buttons'>
-        <button>Start Creating</button>
-        <button>Join</button>
-        <button>Sign in</button>
-    </span>
+🐱 Scratch Giả Lập &nbsp;&nbsp;&nbsp;&nbsp;
+<span>Xin chào, <strong>scratchuser</strong>!</span>
 </div>
 """, unsafe_allow_html=True)
 
-# 🔮 Nút giới thiệu
-st.markdown("### 👨‍💻 About Scratch | 👨‍👩‍👧‍👦 For Parents | 🧑‍🏫 For Educators")
+# --- Giao diện chính
+st.markdown("## 🏆 Featured Scratch Games")
 
-# 🎬 Video banner placeholder
-st.markdown("## 🎥 Watch Video")
-st.image("https://cdn.scratch.mit.edu/get_image/gallery/1118595_170x100.png", caption="Scratch Promo")
-
-# 📂 Các dự án nổi bật (giả lập bằng card)
-st.markdown("## 🏆 Featured Projects")
-cols = st.columns(5)
-project_images = [
-    "https://cdn.scratch.mit.edu/get_image/project/650093752_144x108.png",
-    "https://cdn.scratch.mit.edu/get_image/project/649999950_144x108.png",
-    "https://cdn.scratch.mit.edu/get_image/project/650028177_144x108.png",
-    "https://cdn.scratch.mit.edu/get_image/project/650016825_144x108.png",
-    "https://cdn.scratch.mit.edu/get_image/project/650043322_144x108.png"
+game_data = [
+    {
+        "name": "Flappy Bird Remix",
+        "img": "https://cdn2.scratch.mit.edu/get_image/project/770178950_144x108.png",
+        "url": "https://scratch.mit.edu/projects/770178950/"
+    },
+    {
+        "name": "Car Racing Game",
+        "img": "https://cdn2.scratch.mit.edu/get_image/project/596235086_144x108.png",
+        "url": "https://scratch.mit.edu/projects/596235086/"
+    },
+    {
+        "name": "Cat Jump",
+        "img": "https://cdn2.scratch.mit.edu/get_image/project/532063343_144x108.png",
+        "url": "https://scratch.mit.edu/projects/532063343/"
+    },
+    {
+        "name": "Maze Runner",
+        "img": "https://cdn2.scratch.mit.edu/get_image/project/671704498_144x108.png",
+        "url": "https://scratch.mit.edu/projects/671704498/"
+    }
 ]
 
-project_names = [
-    "Game Vượt Chướng Ngại",
-    "Typing Speed Test",
-    "Bản Đồ Mini",
-    "Pixel Adventure",
-    "Game Lập Trình Mèo"
-]
-
-for i in range(5):
-    with cols[i]:
-        st.image(project_images[i], use_column_width=True)
-        st.caption(f"🎮 {project_names[i]}")
-
-# 📁 Studio nổi bật
-st.markdown("## 🌟 Featured Studios")
 cols = st.columns(4)
-studio_names = ["Studio Game 1", "Thử Thách Mèo", "Game Nhập Vai", "Studio Scratcher"]
-for i in range(4):
+for i, game in enumerate(game_data):
     with cols[i]:
-        st.markdown(f"🗂️ {studio_names[i]}")
-        st.image("https://cdn.scratch.mit.edu/get_image/gallery/1118595_170x100.png", use_column_width=True)
+        st.image(game["img"], caption=game["name"], use_column_width=True)
+        st.markdown(f"[🎮 Chơi ngay]({game['url']})")
+
+# --- Nút đăng xuất
+if st.button("🔓 Đăng xuất"):
+    st.session_state.logged_in = False
+    st.rerun()
