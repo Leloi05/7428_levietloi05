@@ -1,57 +1,57 @@
 import streamlit as st
-import random
-import time
 
-st.set_page_config(page_title="🎴 Memory Card Game", page_icon="🧠", layout="centered")
-st.title("🧠 Memory Card Game")
+st.set_page_config(page_title="🧠 Đố Vui Trắc Nghiệm", page_icon="❓")
 
-# Danh sách cặp thẻ (dùng emoji cho đơn giản)
-emojis = ["🐶", "🐱", "🐶", "🐱", "🐵", "🐵"]
-random.shuffle(emojis)
+st.title("🧠 Đố Vui Trắc Nghiệm")
 
-# Session state
-if "cards" not in st.session_state:
-    st.session_state.cards = ["❓"] * 6
-    st.session_state.emojis = emojis
-    st.session_state.flipped = []
-    st.session_state.matched = []
-    st.session_state.moves = 0
+# Danh sách câu hỏi
+questions = [
+    {
+        "question": "Quốc gia nào có diện tích lớn nhất thế giới?",
+        "options": ["Trung Quốc", "Hoa Kỳ", "Canada", "Nga"],
+        "answer": "Nga"
+    },
+    {
+        "question": "Python là gì?",
+        "options": ["Ngôn ngữ lập trình", "Con rắn", "Trình duyệt", "Bộ phim"],
+        "answer": "Ngôn ngữ lập trình"
+    },
+    {
+        "question": "Streamlit dùng để làm gì?",
+        "options": ["Viết báo cáo", "Tạo web app bằng Python", "Chơi game", "Học Toán"],
+        "answer": "Tạo web app bằng Python"
+    },
+]
 
-# Reset game
-if st.button("🔄 Chơi lại"):
-    emojis = ["🐶", "🐱", "🐶", "🐱", "🐵", "🐵"]
-    random.shuffle(emojis)
-    st.session_state.cards = ["❓"] * 6
-    st.session_state.emojis = emojis
-    st.session_state.flipped = []
-    st.session_state.matched = []
-    st.session_state.moves = 0
+# Khởi tạo trạng thái
+if "current_q" not in st.session_state:
+    st.session_state.current_q = 0
+    st.session_state.score = 0
+    st.session_state.answers = []
 
-# Hiển thị 2 hàng x 3 cột
-cols = st.columns(3)
+# Câu hỏi hiện tại
+q = questions[st.session_state.current_q]
+st.markdown(f"### ❓ Câu {st.session_state.current_q + 1}: {q['question']}")
+choice = st.radio("Chọn một đáp án:", q["options"], key=st.session_state.current_q)
 
-for i in range(6):
-    if st.session_state.cards[i] != "❓" or i in st.session_state.matched:
-        cols[i % 3].button(st.session_state.emojis[i], key=i, disabled=True)
+if st.button("Trả lời"):
+    if choice == q["answer"]:
+        st.success("✅ Chính xác!")
+        st.session_state.score += 1
     else:
-        if cols[i % 3].button("❓", key=i):
-            st.session_state.cards[i] = st.session_state.emojis[i]
-            st.session_state.flipped.append(i)
+        st.error(f"❌ Sai! Đáp án đúng là: {q['answer']}")
+    st.session_state.answers.append(choice)
 
-# Kiểm tra lật 2 thẻ
-if len(st.session_state.flipped) == 2:
-    idx1, idx2 = st.session_state.flipped
-    if st.session_state.emojis[idx1] == st.session_state.emojis[idx2]:
-        st.session_state.matched.extend([idx1, idx2])
+    # Chuyển sang câu tiếp theo
+    if st.session_state.current_q + 1 < len(questions):
+        st.session_state.current_q += 1
+        st.experimental_rerun()
     else:
-        time.sleep(1)
-        st.session_state.cards[idx1] = "❓"
-        st.session_state.cards[idx2] = "❓"
-    st.session_state.flipped = []
-    st.session_state.moves += 1
-    st.experimental_rerun()
-
-# Kết thúc game
-if len(st.session_state.matched) == 6:
-    st.success(f"🎉 Hoàn thành trong {st.session_state.moves} lượt!")
-
+        st.balloons()
+        st.success(f"🎉 Bạn đã hoàn thành {len(questions)} câu hỏi!")
+        st.info(f"📊 Điểm số của bạn: **{st.session_state.score} / {len(questions)}**")
+        if st.button("🔁 Làm lại"):
+            st.session_state.current_q = 0
+            st.session_state.score = 0
+            st.session_state.answers = []
+            st.experimental_rerun()
