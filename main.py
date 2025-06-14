@@ -1,29 +1,34 @@
 import streamlit as st
 st.title('hello world')
-import streamlit as st
 import random
 
-st.set_page_config(page_title="Game Oẳn Tù Tì", page_icon="🎮", layout="centered")
+# Cấu hình trang
+st.set_page_config(page_title="Game Oẳn Tù Tì", page_icon="🎮")
 
-st.title("✌️✊✋ Oẳn Tù Tì")
+# Tiêu đề
+st.title("✊ ✌️ ✋ Oẳn Tù Tì")
 
-choices = ["Kéo", "Búa", "Bao"]
-user_choice = st.selectbox("Bạn chọn gì?", choices)
+# Lựa chọn
+choices = ["Búa", "Kéo", "Bao"]
+user_choice = st.radio("👉 Bạn chọn gì?", choices)
 
-if st.button("Chơi!"):
+# Khi nhấn nút
+if st.button("🎮 Chơi"):
     computer_choice = random.choice(choices)
     st.write(f"🤖 Máy chọn: **{computer_choice}**")
 
+    # Xử lý thắng thua
     if user_choice == computer_choice:
         st.info("⚖️ Hòa rồi!")
     elif (
-        (user_choice == "Kéo" and computer_choice == "Bao") or
         (user_choice == "Búa" and computer_choice == "Kéo") or
+        (user_choice == "Kéo" and computer_choice == "Bao") or
         (user_choice == "Bao" and computer_choice == "Búa")
     ):
-        st.success("🎉 Bạn thắng!")
+        st.success("🎉 Bạn Thắng!")
     else:
-        st.error("💥 Bạn thua rồi!")
+        st.error("💥 Bạn Thua rồi!")
 
+# Ghi chú cuối
 st.markdown("---")
-st.caption("Tạo bởi bạn và AI 🧠")
+st.caption("👨‍💻 Tạo bởi AI hỗ trợ bạn!")
