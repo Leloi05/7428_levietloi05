@@ -1,28 +1,25 @@
 import streamlit as st
 
-# ⚙️ Cấu hình trang – phải đặt đầu tiên
-st.set_page_config(page_title="Các Tỉnh Mới", page_icon="🌄")
+# ⚙️ Đặt cấu hình trang đầu tiên
+st.set_page_config(page_title="Đăng Nhập", page_icon="🔐")
 
-# 🏞️ Tiêu đề chính
-st.title("Khám Phá Các Tỉnh Mới Ở Việt Nam")
+# 📝 Hiển thị tiêu đề bằng Markdown
+st.markdown("""
+# 🔐 Đăng Nhập
+Chào mừng bạn đến với hệ thống!  
+Vui lòng nhập thông tin để tiếp tục.
+""")
 
-# 🔍 Dữ liệu tỉnh
-provinces = {
-    "Quảng Ninh": {
-        "description": "Quảng Ninh nổi tiếng với Vịnh Hạ Long – Di sản thiên nhiên thế giới.",
-        "image_url": "https://media.vneconomy.vn/w800/images/upload/2023/06/30/vinh-ha-long.jpg"
-    },
-    "Hà Giang": {
-        "description": "Hà Giang có cao nguyên đá Đồng Văn và đèo Mã Pì Lèng hùng vĩ.",
-        "image_url": "https://ik.imagekit.io/tvlk/blog/2022/10/du-lich-ha-giang-1.jpg"
-    }
-}
+# 📥 Tạo form đăng nhập
+with st.form("login_form"):
+    username = st.text_input("👤 Tên đăng nhập")
+    password = st.text_input("🔑 Mật khẩu", type="password")
+    submitted = st.form_submit_button("Đăng Nhập")
 
-# 🧭 Giao diện chọn tỉnh
-province_name = st.selectbox("🗺️ Chọn một tỉnh để khám phá:", list(provinces.keys()))
-province = provinces[province_name]
-
-# 📍 Hiển thị thông tin tỉnh
-st.subheader(province_name)
-st.image(province["image_url"], use_column_width=True)
-st.write(province["description"])
+# ✅ Kiểm tra thông tin đăng nhập
+if submitted:
+    if username == "admin" and password == "123456":
+        st.success("✅ Đăng nhập thành công!")
+        st.markdown("### 🎉 Chào mừng, **admin**!")
+    else:
+        st.error("❌ Tên đăng nhập hoặc mật khẩu không đúng.")
