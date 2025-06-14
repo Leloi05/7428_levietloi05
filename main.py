@@ -1,79 +1,45 @@
 import streamlit as st
 
-# --- Cấu hình trang
-st.set_page_config(page_title="Scratch Login Demo", page_icon="🐱", layout="wide")
+st.set_page_config(page_title="🏁 Game Đua Xe", page_icon="🚗")
 
-# --- Session state để lưu trạng thái đăng nhập
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-# --- Hàm kiểm tra đăng nhập
-def check_login(username, password):
-    return username == "scratchuser" and password == "1234"
-
-# --- Nếu chưa đăng nhập
-if not st.session_state.logged_in:
-    st.markdown("## 🔐 Scratch Login")
-    username = st.text_input("👤 Username")
-    password = st.text_input("🔒 Password", type="password")
-    if st.button("➡️ Login"):
-        if check_login(username, password):
-            st.session_state.logged_in = True
-            st.success("✅ Đăng nhập thành công!")
-        else:
-            st.error("❌ Sai tài khoản hoặc mật khẩu.")
-    st.stop()
-
-# --- Header sau khi đăng nhập
-st.markdown("""
-<style>
-.scratch-header {
-    background-color: #974ec3;
-    padding: 1rem;
-    color: white;
-    font-size: 22px;
-    font-weight: bold;
+# --- Dữ liệu cấp độ
+levels = {
+    1: {"correct": "Thẳng", "message": "Bạn thấy con đường rộng mở phía trước."},
+    2: {"correct": "Trái", "message": "Một khúc cua bất ngờ hiện ra bên trái!"},
+    3: {"correct": "Phải", "message": "Một xe tải chắn đường, bạn cần tránh sang phải."},
+    4: {"correct": "Thẳng", "message": "Tăng tốc về đích!"},
 }
-</style>
-<div class='scratch-header'>
-🐱 Scratch Giả Lập &nbsp;&nbsp;&nbsp;&nbsp;
-<span>Xin chào, <strong>scratchuser</strong>!</span>
-</div>
-""", unsafe_allow_html=True)
 
-# --- Giao diện chính
-st.markdown("## 🏆 Featured Scratch Games")
+# --- Trạng thái phiên chơi
+if "level" not in st.session_state:
+    st.session_state.level = 1
+if "score" not in st.session_state:
+    st.session_state.score = 0
 
-game_data = [
-    {
-        "name": "Flappy Bird Remix",
-        "img": "https://cdn2.scratch.mit.edu/get_image/project/770178950_144x108.png",
-        "url": "https://scratch.mit.edu/projects/770178950/"
-    },
-    {
-        "name": "Car Racing Game",
-        "img": "https://cdn2.scratch.mit.edu/get_image/project/596235086_144x108.png",
-        "url": "https://scratch.mit.edu/projects/596235086/"
-    },
-    {
-        "name": "Cat Jump",
-        "img": "https://cdn2.scratch.mit.edu/get_image/project/532063343_144x108.png",
-        "url": "https://scratch.mit.edu/projects/532063343/"
-    },
-    {
-        "name": "Maze Runner",
-        "img": "https://cdn2.scratch.mit.edu/get_image/project/671704498_144x108.png",
-        "url": "https://scratch.mit.edu/projects/671704498/"
-    }
-]
+st.title("🚗 Game Đua Xe – Chọn Hướng")
 
-cols = st.columns(4)
-for i, game in enumerate(game_data):
-    with cols[i]:
-        st.image(game["img"], caption=game["name"], use_column_width=True)
-        st.markdown(f"[🎮 Chơi ngay]({game['url']})")
+st.markdown(f"### 🛣️ Cấp độ: {st.session_state.level}")
+st.markdown(f"🔧 {levels[st.session_state.level]['message']}")
 
-# --- Nút đăng xuất
-if st.button("🔓 Đăng xuất"):
-    st.session_state.logged_in = False
-    st.rerun()
+# --- Chọn hướng
+choice = st.radio("👉 Chọn hướng di chuyển:", ["Trái", "Phải", "Thẳng"])
+
+if st.button("🏎️ Tiếp tục"):
+    correct = levels[st.session_state.level]["correct"]
+    if choice == correct:
+        st.success("✅ Tuyệt vời! Bạn đã chọn đúng hướng.")
+        st.session_state.score += 1
+        if st.session_state.level < len(levels):
+            st.session_state.level += 1
+        else:
+            st.balloons()
+            st.success(f"🎉 Bạn đã hoàn thành game với {st.session_state.score} điểm!")
+            if st.button("🔁 Chơi lại"):
+                st.session_state.level = 1
+                st.session_state.score = 0
+    else:
+        st.error("❌ Bạn đã chọn sai và bị va chạm!")
+        st.markdown(f"💥 Hướng đúng là: **{correct}**")
+        if st.button("🔁 Thử lại"):
+            st.session_state.level = 1
+            st.session_state.score = 0
