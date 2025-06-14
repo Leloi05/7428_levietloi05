@@ -1,45 +1,37 @@
 import streamlit as st
+import random
+import time
 
-# ⚙️ Cấu hình trang
-st.set_page_config(page_title="Đua Xe Máy", page_icon="🏍️")
+# 🚥 Cấu hình trang
+st.set_page_config(page_title="🏁 Game Đua Xe Mini", page_icon="🏍️")
 
-# 🚩 Tiêu đề bằng Markdown
+# 🏎️ Tiêu đề bằng Markdown
 st.markdown("""
-# 🏍️ **MOTO RACE - CUỘC ĐUA XE MÁY THẦN TỐC**
-> Chào mừng bạn đến với cuộc đua tốc độ!  
-> Hãy chọn chiếc xe máy yêu thích và địa hình để khởi động động cơ!  
+# 🏍️ **MOTO RACE SIMULATOR**
+Chào mừng bạn đến với game đua xe máy mini!  
+> Hãy chọn xe, địa hình và tốc độ. Sau đó bắt đầu cuộc đua và xem kết quả!
 ---
 """)
 
-# 🛵 Chọn xe máy
-bike = st.selectbox("🛵 Chọn xe máy đua:", [
-    "Exciter 155 VVA",
-    "Winner X",
-    "Wave Alpha Tăng Áp",
-    "Honda Sonic 150R",
-    "Suzuki Raider R150"
-])
+# 🔧 Lựa chọn của người chơi
+car = st.selectbox("🛵 Chọn xe máy:", ["Winner X", "Exciter", "Wave Alpha", "Sirius", "Raider"])
+track = st.radio("🛣️ Chọn địa hình:", ["Đường nhựa", "Đường đất", "Đồi núi", "Thành phố"])
+speed = st.slider("⚙️ Tốc độ (Km/h):", 50, 300, 150, step=10)
 
-# 🏞️ Chọn địa hình đua
-terrain = st.radio("🌍 Chọn địa hình:", [
-    "Đường nhựa thành phố",
-    "Đường núi hiểm trở",
-    "Đường đua sân vận động",
-    "Đường bùn địa hình"
-])
+# 🚀 Bắt đầu đua
+if st.button("🔥 BẮT ĐẦU ĐUA"):
+    st.markdown(f"### 🚦 Bắt đầu đua với **{car}** trên địa hình **{track}** với tốc độ **{speed} Km/h**...")
+    st.info("Đang tính toán kết quả cuộc đua...")
+    time.sleep(2)
 
-# ⚡ Chọn tốc độ
-speed = st.slider("⚙️ Chọn tốc độ khởi điểm (Km/h):", min_value=40, max_value=200, step=10, value=100)
+    # 🎲 Kết quả ngẫu nhiên
+    result = random.choice(["🏆 Bạn đã chiến thắng!", "😓 Bạn về nhì", "💥 Xe bị hỏng giữa đường", "🥉 Bạn về thứ ba"])
 
-# 🚀 Nút bắt đầu đua
-if st.button("🔥 BẮT ĐẦU CUỘC ĐUA"):
-    st.success(f"🏁 Bạn đang cưỡi **{bike}** trên địa hình **{terrain}** với tốc độ **{speed} Km/h**!")
-    st.balloons()
-    st.markdown("### 🏆 Vượt qua tất cả và trở thành tay đua huyền thoại!")
+    st.success(result)
 
-# 📸 Hình ảnh minh họa xe đua
-st.image("https://cdn.pixabay.com/photo/2017/08/07/22/01/motorcycle-2608487_1280.jpg", use_column_width=True, caption="Tăng tốc nào!")
+    # 📸 Ảnh minh họa
+    st.image("https://cdn.pixabay.com/photo/2017/02/01/16/38/motorcycle-racing-2035702_1280.jpg", caption="Cuộc đua đã kết thúc!", use_column_width=True)
 
-# 📎 Chữ kết
+# 📌 Footer
 st.markdown("---")
-st.caption("🎮 Trang web mô phỏng đua xe máy bằng Streamlit & Markdown – Thiết kế bởi AI")
+st.caption("🎮 Game mô phỏng đua xe mini bằng Streamlit + Markdown – Thiết kế bởi ChatGPT")
