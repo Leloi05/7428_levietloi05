@@ -38,7 +38,7 @@ if st.button("🔥 BẮT ĐẦU CUỘC ĐUA"):
     st.markdown("### 🏆 Vượt qua tất cả và trở thành tay đua huyền thoại!")
 
 # 📸 Hình ảnh minh họa xe đua
-st.image("https://cdn.pixabay.com/photo/2015/05/15/14/42/motorcycle-768923_1280.jpg", use_column_width=True, caption="Tăng tốc nào!")
+st.image("https://cdn.pixabay.com/photo/2017/08/07/22/01/motorcycle-2608487_1280.jpg", use_column_width=True, caption="Tăng tốc nào!")
 
 # 📎 Chữ kết
 st.markdown("---")
